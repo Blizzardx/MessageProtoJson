@@ -14,4 +14,4 @@ echo "GOROOT : $GOROOT"
 echo "GOARCH : $GOARCH"
 echo "GOOS : $GOOS"
 
-go build -o ../linux/configProtoTool github.com/Blizzardx/ConfigProtocol/release
+go build -o ../linux/messageProtoJson github.com/Blizzardx/MessageProtoJson/release

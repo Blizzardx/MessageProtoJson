@@ -6,7 +6,7 @@ cd ../../../../../../
 set GOPATH=%cd%
 cd %CURR%
 
-go build -o ../linux/configProtoTool github.com/Blizzardx/ConfigProtocol/release
+go build -o ../linux/messageProtoJson github.com/Blizzardx/MessageProtoJson/release
 
 @IF %ERRORLEVEL% NEQ 0 pause
 
