@@ -58,7 +58,7 @@ func EnsureFolder(path string) {
 	} else {
 		fmt.Printf("no dir %v \n", path)
 		// 创建文件夹
-		err := os.Mkdir(path, os.ModePerm)
+		err := os.MkdirAll(path, os.ModePerm)
 		if err != nil {
 			fmt.Printf("mkdir failed %v \n", err)
 		} else {

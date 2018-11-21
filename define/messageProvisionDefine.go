@@ -62,14 +62,14 @@ func GenSampleFile() {
 
 	for i := 0; i < 10; i++ {
 		classSample := &MessageProvisionClassInfo{Name: "class" + strconv.Itoa(i)}
-		classSample.FieldInfo = append(classSample.FieldInfo, "field1"+":int32")
-		classSample.FieldInfo = append(classSample.FieldInfo, "field1"+":int64"+":repeated")
-		classSample.FieldInfo = append(classSample.FieldInfo, "field1"+":float32")
-		classSample.FieldInfo = append(classSample.FieldInfo, "field1"+":float64"+":repeated")
-		classSample.FieldInfo = append(classSample.FieldInfo, "field1"+":bool")
-		classSample.FieldInfo = append(classSample.FieldInfo, "field1"+":string"+":repeated")
+		classSample.FieldInfo = append(classSample.FieldInfo, "int32"+":field1")
+		classSample.FieldInfo = append(classSample.FieldInfo, "int64"+":field2"+":repeated")
+		classSample.FieldInfo = append(classSample.FieldInfo, "float32"+":field3")
+		classSample.FieldInfo = append(classSample.FieldInfo, "float64"+":field4"+":repeated")
+		classSample.FieldInfo = append(classSample.FieldInfo, "bool"+":field5")
+		classSample.FieldInfo = append(classSample.FieldInfo, "string"+":field6"+":repeated")
 		if i > 0 {
-			classSample.FieldInfo = append(classSample.FieldInfo, "field1"+":"+"class"+strconv.Itoa(i-1)+":repeated")
+			classSample.FieldInfo = append(classSample.FieldInfo, "class"+strconv.Itoa(i-1)+":field7:repeated")
 		}
 		sampleFile.ClassList = append(sampleFile.ClassList, classSample)
 	}

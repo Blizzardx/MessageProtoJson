@@ -1,0 +1,144 @@
+{
+	"PackageName": "message",
+	"enums": [
+		{
+			"Name": "Color",
+			"enums": [
+				"yellow=1",
+				"blue=2",
+				"red=3",
+				"green=4"
+			]
+		},
+		{
+			"Name": "Quality",
+			"enums": [
+				"yellow=1",
+				"blue=2",
+				"red=3",
+				"green=4"
+			]
+		}
+	],
+	"classes": [
+		{
+			"Name": "class0",
+			"fields": [
+				"int32:field1",
+				"int64:field2:repeated",
+				"float32:field3",
+				"float64:field4:repeated",
+				"bool:field5",
+				"string:field6:repeated"
+			]
+		},
+		{
+			"Name": "class1",
+			"fields": [
+				"int32:field1",
+				"int64:field2:repeated",
+				"float32:field3",
+				"float64:field4:repeated",
+				"bool:field5",
+				"string:field6:repeated",
+				"class0:field7:repeated"
+			]
+		},
+		{
+			"Name": "class2",
+			"fields": [
+				"int32:field1",
+				"int64:field2:repeated",
+				"float32:field3",
+				"float64:field4:repeated",
+				"bool:field5",
+				"string:field6:repeated",
+				"class1:field7:repeated"
+			]
+		},
+		{
+			"Name": "class3",
+			"fields": [
+				"int32:field1",
+				"int64:field2:repeated",
+				"float32:field3",
+				"float64:field4:repeated",
+				"bool:field5",
+				"string:field6:repeated",
+				"class2:field7:repeated"
+			]
+		},
+		{
+			"Name": "class4",
+			"fields": [
+				"int32:field1",
+				"int64:field2:repeated",
+				"float32:field3",
+				"float64:field4:repeated",
+				"bool:field5",
+				"string:field6:repeated",
+				"class3:field7:repeated"
+			]
+		},
+		{
+			"Name": "class5",
+			"fields": [
+				"int32:field1",
+				"int64:field2:repeated",
+				"float32:field3",
+				"float64:field4:repeated",
+				"bool:field5",
+				"string:field6:repeated",
+				"class4:field7:repeated"
+			]
+		},
+		{
+			"Name": "class6",
+			"fields": [
+				"int32:field1",
+				"int64:field2:repeated",
+				"float32:field3",
+				"float64:field4:repeated",
+				"bool:field5",
+				"string:field6:repeated",
+				"class5:field7:repeated"
+			]
+		},
+		{
+			"Name": "class7",
+			"fields": [
+				"int32:field1",
+				"int64:field2:repeated",
+				"float32:field3",
+				"float64:field4:repeated",
+				"bool:field5",
+				"string:field6:repeated",
+				"class6:field7:repeated"
+			]
+		},
+		{
+			"Name": "class8",
+			"fields": [
+				"int32:field1",
+				"int64:field2:repeated",
+				"float32:field3",
+				"float64:field4:repeated",
+				"bool:field5",
+				"string:field6:repeated",
+				"class7:field7:repeated"
+			]
+		},
+		{
+			"Name": "class9",
+			"fields": [
+				"int32:field1",
+				"int64:field2:repeated",
+				"float32:field3",
+				"float64:field4:repeated",
+				"bool:field5",
+				"string:field6:repeated",
+				"class8:field7:repeated"
+			]
+		}
+	]
+}

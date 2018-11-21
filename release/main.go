@@ -22,6 +22,9 @@ type ExportConfig struct {
 const configName = "messageProtoJson.cfg"
 
 func main() {
+	Exec()
+}
+func Exec() {
 	content, err := common.LoadFileByName(configName)
 	if err != nil {
 		//
@@ -41,6 +44,9 @@ func main() {
 			ExportPath: configInfo.OutputDir + "/" + getPathByLan(exportTarget.Lan),
 			Lan:        exportTarget.Lan,
 		})
+	}
+	if configInfo.InputDir == "" {
+		configInfo.InputDir = common.GetCurrentPath()
 	}
 
 	err = tool.ExportProtoFile(configInfo.InputDir, configInfo.TargetFileSuffix, exportTargetList)

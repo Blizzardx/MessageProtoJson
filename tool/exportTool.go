@@ -140,7 +140,10 @@ func doExportProtoFileElement(fileName string, parserInfo *define.MessageProvisi
 	for _, target := range exportTargets {
 		realExportPath := target.ExportPath + "/" + parserInfo.PackageName
 		common.EnsureFolder(realExportPath)
-		doExportProtoFileOnTarget(fileName, parserInfo, realExportPath, target.Lan)
+		err := doExportProtoFileOnTarget(fileName, parserInfo, realExportPath, target.Lan)
+		if nil != err {
+			return err
+		}
 	}
 
 	return nil
@@ -151,6 +154,7 @@ func doExportProtoFileOnTarget(fileName string, provisionParserInfo *define.Mess
 		if nil != err {
 			return err
 		}
+		return nil
 	}
 	return errors.New(fmt.Sprint("not support lan ", lan))
 }
