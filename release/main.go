@@ -87,4 +87,5 @@ func createSample() {
 		return
 	}
 	fmt.Println("finished config first ", configName)
+	define.GenSampleFile()
 }
