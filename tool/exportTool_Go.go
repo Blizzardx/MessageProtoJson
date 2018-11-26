@@ -115,7 +115,7 @@ func (self *ExportHandler_Go) genClassContent(provisionParserInfo *define.Messag
 			realFieldName := common.FirstLetterToUpper(classFiledInfo.Name)
 			template.Field = append(template.Field, &ExportHandler_GoClassElementInfo{
 				Name:     realFieldName,
-				Type:     self.getFieldType(classFiledInfo.Type, classFiledInfo.IsList),
+				Type:     self.getFieldType(provisionParserInfo, classFiledInfo.Type, classFiledInfo.IsList),
 				Decorate: self.getDecorateByName(classFiledInfo.Name),
 			})
 		}
@@ -149,15 +149,29 @@ func (self *ExportHandler_Go) convertToSelfType(fieldType string) string {
 		return ""
 	}
 }
-func (handler *ExportHandler_Go) getFieldType(fieldType string, isList bool) string {
+func (self *ExportHandler_Go) isEnum(provisionParserInfo *define.MessageProvisionParserInfo, typeName string) bool {
+	for _, enum := range provisionParserInfo.EnumList {
+		if enum.Name == typeName {
+			return true
+		}
+	}
+	return false
+}
+func (handler *ExportHandler_Go) getFieldType(provisionParserInfo *define.MessageProvisionParserInfo, fieldType string, isList bool) string {
 	typeName := handler.convertToSelfType(fieldType)
 	if isList {
 		if typeName == "" {
+			if handler.isEnum(provisionParserInfo, fieldType) {
+				return "[]" + common.FirstLetterToUpper(fieldType)
+			}
 			return "[]*" + common.FirstLetterToUpper(fieldType)
 		}
 		return "[]" + typeName
 	}
 	if typeName == "" {
+		if handler.isEnum(provisionParserInfo, fieldType) {
+			return common.FirstLetterToUpper(fieldType)
+		}
 		return "*" + common.FirstLetterToUpper(fieldType)
 	}
 	return typeName
