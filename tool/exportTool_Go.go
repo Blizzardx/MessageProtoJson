@@ -158,7 +158,7 @@ func (handler *ExportHandler_Go) getFieldType(fieldType string, isList bool) str
 		return "[]" + typeName
 	}
 	if typeName == "" {
-		return common.FirstLetterToUpper(fieldType)
+		return "*" + common.FirstLetterToUpper(fieldType)
 	}
 	return typeName
 }
