@@ -8,16 +8,17 @@ import (
 )
 
 type MessageProvisionInfo struct {
-	PackageName string
+	PackageName string                       `json:"pkg"`
+	ImportList  []string                     `json:"import"`
 	EnumList    []*MessageProvisionEnumInfo  `json:"enums"`
 	ClassList   []*MessageProvisionClassInfo `json:"classes"`
 }
 type MessageProvisionEnumInfo struct {
-	Name     string
+	Name     string   `json:"name"`
 	EnumInfo []string `json:"enums"` // yellow=1 red=2
 }
 type MessageProvisionClassInfo struct {
-	Name      string
+	Name      string   `json:"name"`
 	FieldInfo []string `json:"fields"` //int32:id:isList name:string:repeated
 }
 
@@ -46,6 +47,7 @@ type MessageProvisionParserClassFieldInfo struct {
 
 func GenSampleFile() {
 	sampleFile := &MessageProvisionInfo{PackageName: "message"}
+	sampleFile.ImportList = append(sampleFile.ImportList, "sampleFile")
 	enumSample1 := &MessageProvisionEnumInfo{Name: "Color"}
 	enumSample1.EnumInfo = append(enumSample1.EnumInfo, "yellow=1")
 	enumSample1.EnumInfo = append(enumSample1.EnumInfo, "blue=2")
@@ -73,7 +75,7 @@ func GenSampleFile() {
 		}
 		sampleFile.ClassList = append(sampleFile.ClassList, classSample)
 	}
-	fileName := "sampleFle.json"
+	fileName := "sampleFile.json"
 	content, _ := json.Marshal(sampleFile)
 	var out bytes.Buffer
 	json.Indent(&out, content, "", "\t")
