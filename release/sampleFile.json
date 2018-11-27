@@ -1,8 +1,11 @@
 {
-	"PackageName": "message",
+	"pkg": "message",
+	"import": [
+		"sampleFile"
+	],
 	"enums": [
 		{
-			"Name": "Color",
+			"name": "Color",
 			"enums": [
 				"yellow=1",
 				"blue=2",
@@ -11,7 +14,7 @@
 			]
 		},
 		{
-			"Name": "Quality",
+			"name": "Quality",
 			"enums": [
 				"yellow=1",
 				"blue=2",
@@ -22,7 +25,7 @@
 	],
 	"classes": [
 		{
-			"Name": "class0",
+			"name": "class0",
 			"fields": [
 				"int32:field1",
 				"int64:field2:repeated",
@@ -33,7 +36,7 @@
 			]
 		},
 		{
-			"Name": "class1",
+			"name": "class1",
 			"fields": [
 				"int32:field1",
 				"int64:field2:repeated",
@@ -45,7 +48,7 @@
 			]
 		},
 		{
-			"Name": "class2",
+			"name": "class2",
 			"fields": [
 				"int32:field1",
 				"int64:field2:repeated",
@@ -57,7 +60,7 @@
 			]
 		},
 		{
-			"Name": "class3",
+			"name": "class3",
 			"fields": [
 				"int32:field1",
 				"int64:field2:repeated",
@@ -69,7 +72,7 @@
 			]
 		},
 		{
-			"Name": "class4",
+			"name": "class4",
 			"fields": [
 				"int32:field1",
 				"int64:field2:repeated",
@@ -81,7 +84,7 @@
 			]
 		},
 		{
-			"Name": "class5",
+			"name": "class5",
 			"fields": [
 				"int32:field1",
 				"int64:field2:repeated",
@@ -93,7 +96,7 @@
 			]
 		},
 		{
-			"Name": "class6",
+			"name": "class6",
 			"fields": [
 				"int32:field1",
 				"int64:field2:repeated",
@@ -105,7 +108,7 @@
 			]
 		},
 		{
-			"Name": "class7",
+			"name": "class7",
 			"fields": [
 				"int32:field1",
 				"int64:field2:repeated",
@@ -117,7 +120,7 @@
 			]
 		},
 		{
-			"Name": "class8",
+			"name": "class8",
 			"fields": [
 				"int32:field1",
 				"int64:field2:repeated",
@@ -129,7 +132,7 @@
 			]
 		},
 		{
-			"Name": "class9",
+			"name": "class9",
 			"fields": [
 				"int32:field1",
 				"int64:field2:repeated",

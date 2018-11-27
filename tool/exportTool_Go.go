@@ -66,7 +66,7 @@ type ExportHandler_GoClassElementInfo struct {
 type ExportHandler_Go struct {
 }
 
-func (handler *ExportHandler_Go) DoExportProtoFileOnTarget(fileName string, provisionParserInfo *define.MessageProvisionParserInfo, exportPath string) error {
+func (handler *ExportHandler_Go) DoExportProtoFileOnTarget(fileName string, provisionParserInfo *define.MessageProvisionParserInfo, exportPath string, importfile []*define.MessageProvisionParserInfo) error {
 	filePath := exportPath + "/" + fileName + ".go"
 
 	enumList, err := handler.genEnumContent(provisionParserInfo)

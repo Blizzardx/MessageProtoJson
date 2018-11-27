@@ -1,0 +1,95 @@
+{
+	"pkg": "message",
+	"enums": [
+		{
+			"name": "ErrorCode",
+			"enums": [
+				"None=0",
+				"ErrorLoginCode=1",
+				"LoginTimeout=2",
+				"DataBaseError=3",
+				"GameServerIdError=4",
+				"DoNotHaveEnoughRoomId=5",
+				"RoomNotExist=6",
+				"RoomIsDuringBattle=7",
+				"RoomPlayerNotExist=8",
+				"RoomIsFull=9"
+			]
+		},
+		{
+			"name": "PlayerStatus",
+			"enums": [
+				"Idle=0",
+				"InRoom=1",
+				"Matching=2"
+			]
+		},
+		{
+			"name": "RoomStatus",
+			"enums": [
+				"Waiting=0",
+				"Battle=1"
+			]
+		}
+	],
+	"classes": [
+		{
+			"name": "RoomPlayerInfo",
+			"fields": [
+				"string:id",
+				"string:icon",
+				"string:name"
+			]
+		},
+		{
+			"name": "RoomInfo",
+			"fields": [
+				"int32:roomId",
+				"RoomStatus:status",
+				"RoomPlayerInfo:roomPlayer:repeated"
+			]
+		},
+		{
+			"name": "CSLogin",
+			"fields": [
+				"string:loginCode"
+			]
+		},
+		{
+			"name": "SCLogin",
+			"fields": [
+				"PlayerStatus:status",
+				"RoomInfo:roomInfo",
+				"ErrorCode:errorCode"
+			]
+		},
+		{
+			"name": "SCKickPlayer",
+			"fields": [
+			]
+		},
+		{
+			"name": "CSPing",
+			"fields": [
+			]
+		},
+		{
+			"name": "SCPing",
+			"fields": [
+			]
+		},
+		{
+			"name": "ParamInfo",
+			"fields": [
+				"string:key",
+				"string:value"
+			]
+		},
+		{
+			"name": "CSChangeParam",
+			"fields": [
+				"ParamInfo:paramInfoList:repeated"
+			]
+		}
+	]
+}

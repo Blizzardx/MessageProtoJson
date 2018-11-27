@@ -1,0 +1,54 @@
+{
+	"pkg": "message",
+	"import":["player"],
+	"enums": [],
+	"classes": [
+		{
+			"name": "BattleLoadingInfo",
+			"fields": [
+				"string:PlayerId",
+				"float32:Process"
+			]
+		},
+		{
+			"name": "SCSyncPlayerLoadingProcess",
+			"fields": [
+				"BattleLoadingInfo:LoadingInfo"
+			]
+		},
+		{
+			"name": "SCBeginBattle",
+			"fields": [
+			]
+		},
+		{
+			"name": "SCCreateRoom",
+			"fields": [
+				"RoomInfo:roomInfo",
+				"ErrorCode:errorCode"
+			]
+		},
+		{
+			"name": "SCJoinRoomInfo",
+			"fields": [
+				"int32:roomId"
+			]
+		},
+		{
+			"name": "SCExitRoom",
+			"fields": [
+			]
+		},
+		{
+			"name": "SCBeginLoadResource",
+			"fields": [
+			]
+		},
+		{
+			"name": "CSReportLoadingProcess",
+			"fields": [
+				"float32:Process"
+			]
+		}
+	]
+}

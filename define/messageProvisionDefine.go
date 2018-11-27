@@ -24,6 +24,8 @@ type MessageProvisionClassInfo struct {
 
 type MessageProvisionParserInfo struct {
 	PackageName string
+	ImportList  []string
+	Name        string
 	EnumList    []*MessageProvisionParserEnumInfo
 	ClassList   []*MessageProvisionParserClassInfo
 }

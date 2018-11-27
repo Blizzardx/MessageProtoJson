@@ -21,7 +21,7 @@ type ExportTarget struct {
 	ExportPath string
 }
 type ExportHandler interface {
-	DoExportProtoFileOnTarget(fileName string, provisionParserInfo *define.MessageProvisionParserInfo, exportPath string) error
+	DoExportProtoFileOnTarget(fileName string, provisionParserInfo *define.MessageProvisionParserInfo, exportPath string, importfile []*define.MessageProvisionParserInfo) error
 }
 
 var exportHandlerMap = map[define.SupportLan]ExportHandler{}
@@ -48,7 +48,7 @@ func ExportProtoFile(provisionFilePath string, provisionFileSuffix string, exPor
 	}
 	errorMsg := ""
 	for _, file := range targetFile {
-		err := exportProtoFileElement(file.FilePath, exPortTarget)
+		err := exportProtoFileElement(file.FilePath, exPortTarget, file.FileDir, provisionFileSuffix)
 		if nil != err {
 			errorMsg += err.Error() + "\n"
 		}
@@ -59,24 +59,52 @@ func ExportProtoFile(provisionFilePath string, provisionFileSuffix string, exPor
 	return nil
 }
 
-func exportProtoFileElement(filePath string, exportTargets []*ExportTarget) error {
+func exportProtoFileElement(filePath string, exportTargets []*ExportTarget, fileDir string, provisionFileSuffix string) error {
 	//read file
 	fileContent, err := common.LoadFileByName(filePath)
 	if nil != err {
 		return err
 	}
+	fileNameWithoutSuffix, _ := common.ParserFileNameByPath(filePath)
 	provisionInfo := &define.MessageProvisionInfo{}
 	err = json.Unmarshal(fileContent, provisionInfo)
 	if nil != err {
 		return errors.New("error on parser file to json " + filePath + " error: " + err.Error())
 	}
-	fixedProvisionInfo, err := parserProvisionInfo(provisionInfo)
+	fixedProvisionInfo, err := parserProvisionInfo(fileNameWithoutSuffix, provisionInfo)
 	if nil != err {
 		return errors.New("error on parser provision file " + filePath + " error: " + err.Error())
 	}
-	fileNameWithoutSuffix, _ := common.ParserFileNameByPath(filePath)
-	err = doExportProtoFileElement(fileNameWithoutSuffix, fixedProvisionInfo, exportTargets)
+	importFileList := getImportedFileProvision(fixedProvisionInfo, fileDir, provisionFileSuffix)
+
+	err = doExportProtoFileElement(fileNameWithoutSuffix, fixedProvisionInfo, exportTargets, importFileList)
 	return err
+}
+func getImportedFileProvision(targetFile *define.MessageProvisionParserInfo, fileDir string, provisionFileSuffix string) []*define.MessageProvisionParserInfo {
+	var resList []*define.MessageProvisionParserInfo
+	for _, importFile := range targetFile.ImportList {
+		filePath := fileDir + "/" + importFile + "." + provisionFileSuffix
+		//read file
+		fileContent, err := common.LoadFileByName(filePath)
+		if nil != err {
+			fmt.Println(err)
+			continue
+		}
+		provisionInfo := &define.MessageProvisionInfo{}
+		err = json.Unmarshal(fileContent, provisionInfo)
+		if nil != err {
+			fmt.Println("error on parser file to json " + filePath + " error: " + err.Error())
+			continue
+		}
+		fileNameWithoutSuffix, _ := common.ParserFileNameByPath(filePath)
+		fixedProvisionInfo, err := parserProvisionInfo(fileNameWithoutSuffix, provisionInfo)
+		if nil != err {
+			fmt.Println("error on parser provision file " + filePath + " error: " + err.Error())
+			continue
+		}
+		resList = append(resList, fixedProvisionInfo)
+	}
+	return resList
 }
 func parserClassInfo(fieldInfo []string) ([]*define.MessageProvisionParserClassFieldInfo, error) {
 	var result []*define.MessageProvisionParserClassFieldInfo
@@ -114,8 +142,8 @@ func parserEnumInfo(enumInfo []string) ([]*define.MessageProvisionParserEnumFiel
 	}
 	return result, nil
 }
-func parserProvisionInfo(provisionInfo *define.MessageProvisionInfo) (*define.MessageProvisionParserInfo, error) {
-	result := &define.MessageProvisionParserInfo{PackageName: provisionInfo.PackageName}
+func parserProvisionInfo(name string, provisionInfo *define.MessageProvisionInfo) (*define.MessageProvisionParserInfo, error) {
+	result := &define.MessageProvisionParserInfo{Name: name, PackageName: provisionInfo.PackageName, ImportList: provisionInfo.ImportList}
 	for _, enum := range provisionInfo.EnumList {
 		parserEnum := &define.MessageProvisionParserEnumInfo{Name: enum.Name}
 		enumInfoList, err := parserEnumInfo(enum.EnumInfo)
@@ -136,11 +164,11 @@ func parserProvisionInfo(provisionInfo *define.MessageProvisionInfo) (*define.Me
 	}
 	return result, nil
 }
-func doExportProtoFileElement(fileName string, parserInfo *define.MessageProvisionParserInfo, exportTargets []*ExportTarget) error {
+func doExportProtoFileElement(fileName string, parserInfo *define.MessageProvisionParserInfo, exportTargets []*ExportTarget, importfile []*define.MessageProvisionParserInfo) error {
 	for _, target := range exportTargets {
 		realExportPath := target.ExportPath + "/" + parserInfo.PackageName
 		common.EnsureFolder(realExportPath)
-		err := doExportProtoFileOnTarget(fileName, parserInfo, realExportPath, target.Lan)
+		err := doExportProtoFileOnTarget(fileName, parserInfo, realExportPath, target.Lan, importfile)
 		if nil != err {
 			return err
 		}
@@ -148,9 +176,9 @@ func doExportProtoFileElement(fileName string, parserInfo *define.MessageProvisi
 
 	return nil
 }
-func doExportProtoFileOnTarget(fileName string, provisionParserInfo *define.MessageProvisionParserInfo, exportPath string, lan define.SupportLan) error {
+func doExportProtoFileOnTarget(fileName string, provisionParserInfo *define.MessageProvisionParserInfo, exportPath string, lan define.SupportLan, importfile []*define.MessageProvisionParserInfo) error {
 	if handler, ok := exportHandlerMap[lan]; ok {
-		err := handler.DoExportProtoFileOnTarget(fileName, provisionParserInfo, exportPath)
+		err := handler.DoExportProtoFileOnTarget(fileName, provisionParserInfo, exportPath, importfile)
 		if nil != err {
 			return err
 		}
@@ -162,6 +190,7 @@ func doExportProtoFileOnTarget(fileName string, provisionParserInfo *define.Mess
 type FileDetail struct {
 	FileName string
 	FilePath string
+	FileDir  string
 	FileSize int64
 }
 
@@ -176,7 +205,7 @@ func loadAllFile(dirPath string) []*FileDetail {
 		if file.IsDir() {
 			filePool = append(filePool, loadAllFile(dirPath+"/"+file.Name())...)
 		} else {
-			filePool = append(filePool, &FileDetail{FileName: file.Name(), FilePath: dirPath + "/" + file.Name(), FileSize: file.Size()})
+			filePool = append(filePool, &FileDetail{FileDir: dirPath, FileName: file.Name(), FilePath: dirPath + "/" + file.Name(), FileSize: file.Size()})
 		}
 	}
 	return filePool
