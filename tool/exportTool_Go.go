@@ -73,7 +73,7 @@ func (handler *ExportHandler_Go) DoExportProtoFileOnTarget(fileName string, prov
 	if nil != err {
 		return err
 	}
-	classList, err := handler.genClassContent(provisionParserInfo)
+	classList, err := handler.genClassContent(provisionParserInfo, importfile)
 	if nil != err {
 		return err
 	}
@@ -106,7 +106,7 @@ func (self *ExportHandler_Go) genEnumContent(provisionParserInfo *define.Message
 	}
 	return result, nil
 }
-func (self *ExportHandler_Go) genClassContent(provisionParserInfo *define.MessageProvisionParserInfo) ([]string, error) {
+func (self *ExportHandler_Go) genClassContent(provisionParserInfo *define.MessageProvisionParserInfo, importfile []*define.MessageProvisionParserInfo) ([]string, error) {
 	var result []string
 	for _, classProvision := range provisionParserInfo.ClassList {
 
@@ -115,7 +115,7 @@ func (self *ExportHandler_Go) genClassContent(provisionParserInfo *define.Messag
 			realFieldName := common.FirstLetterToUpper(classFiledInfo.Name)
 			template.Field = append(template.Field, &ExportHandler_GoClassElementInfo{
 				Name:     realFieldName,
-				Type:     self.getFieldType(provisionParserInfo, classFiledInfo.Type, classFiledInfo.IsList),
+				Type:     self.getFieldType(provisionParserInfo, importfile, classFiledInfo.Type, classFiledInfo.IsList),
 				Decorate: self.getDecorateByName(classFiledInfo.Name),
 			})
 		}
@@ -149,19 +149,26 @@ func (self *ExportHandler_Go) convertToSelfType(fieldType string) string {
 		return ""
 	}
 }
-func (self *ExportHandler_Go) isEnum(provisionParserInfo *define.MessageProvisionParserInfo, typeName string) bool {
+func (self *ExportHandler_Go) isEnum(provisionParserInfo *define.MessageProvisionParserInfo, importfile []*define.MessageProvisionParserInfo, typeName string) bool {
 	for _, enum := range provisionParserInfo.EnumList {
 		if enum.Name == typeName {
 			return true
 		}
 	}
+	for _, importFile := range importfile {
+		for _, enum := range importFile.EnumList {
+			if enum.Name == typeName {
+				return true
+			}
+		}
+	}
 	return false
 }
-func (handler *ExportHandler_Go) getFieldType(provisionParserInfo *define.MessageProvisionParserInfo, fieldType string, isList bool) string {
+func (handler *ExportHandler_Go) getFieldType(provisionParserInfo *define.MessageProvisionParserInfo, importfile []*define.MessageProvisionParserInfo, fieldType string, isList bool) string {
 	typeName := handler.convertToSelfType(fieldType)
 	if isList {
 		if typeName == "" {
-			if handler.isEnum(provisionParserInfo, fieldType) {
+			if handler.isEnum(provisionParserInfo, importfile, fieldType) {
 				return "[]" + common.FirstLetterToUpper(fieldType)
 			}
 			return "[]*" + common.FirstLetterToUpper(fieldType)
@@ -169,7 +176,7 @@ func (handler *ExportHandler_Go) getFieldType(provisionParserInfo *define.Messag
 		return "[]" + typeName
 	}
 	if typeName == "" {
-		if handler.isEnum(provisionParserInfo, fieldType) {
+		if handler.isEnum(provisionParserInfo, importfile, fieldType) {
 			return common.FirstLetterToUpper(fieldType)
 		}
 		return "*" + common.FirstLetterToUpper(fieldType)
